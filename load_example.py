@@ -4,9 +4,9 @@ Example: load value-tradeoff task data.
 Usage:
     from load_example import get_pairs, get_prompt, get_target_dataset
 
-    # List all pairs in a split
+    # Get all pairs in a split (keyed by "value_a vs value_b")
     pairs = get_pairs("train")
-    pair = pairs[0]
+    pair = pairs["emotional wellbeing vs educational thoroughness"]
 
     # Get the system prompt
     prompt = get_prompt(pair, side="a")
@@ -24,19 +24,24 @@ from pathlib import Path
 DATA_DIR = Path(__file__).parent / "data"
 
 
-def get_pairs(split: str) -> list[dict]:
-    """List all value pairs in a split.
+def get_pairs(split: str) -> dict[str, dict]:
+    """Get all value pairs in a split, keyed by "value_a vs value_b".
 
     Args:
-        split: train, val, dev, or test
+        split: train, val, dev
 
     Returns:
-        list of dicts with value1, value2, p_star_a, p_star_b, scenarios, spectrums
+        dict mapping "value_a vs value_b" to the full pair dict
     """
     path = DATA_DIR / f"{split}.jsonl"
     if not path.exists():
         raise FileNotFoundError(f"No split file: {path}")
-    return [json.loads(l) for l in open(path)]
+    pairs = {}
+    for line in open(path):
+        r = json.loads(line)
+        key = f"{r['value_a']} vs {r['value_b']}"
+        pairs[key] = r
+    return pairs
 
 
 def get_prompt(pair: dict, side: str = "a") -> str:
@@ -44,13 +49,12 @@ def get_prompt(pair: dict, side: str = "a") -> str:
 
     Args:
         pair: a pair dict from get_pairs()
-        side: "a" for value1 (P*_a) or "b" for value2 (P*_b)
+        side: "a" for value_a (P*_a) or "b" for value_b (P*_b)
 
     Returns:
         the system prompt string
     """
-    key = f"p_star_{side}"
-    return pair[key]
+    return pair[f"p_star_{side}"]
 
 
 def get_target_dataset(pair: dict, side: str = "a") -> list[tuple[str, str]]:
@@ -58,40 +62,44 @@ def get_target_dataset(pair: dict, side: str = "a") -> list[tuple[str, str]]:
 
     Args:
         pair: a pair dict from get_pairs()
-        side: "a" for value1 (P*_a steered) or "b" for value2 (P*_b steered)
+        side: "a" for value_a (P*_a steered) or "b" for value_b (P*_b steered)
 
     Returns:
         list of (scenario, response) tuples
     """
-    for s in ["train", "val", "dev", "test"]:
+    for s in ["train", "val", "dev"]:
         path = DATA_DIR / f"{s}_responses.jsonl"
         if not path.exists():
             continue
         for line in open(path):
             row = json.loads(line)
-            if row["value1"] == pair["value1"] and row["value2"] == pair["value2"]:
+            if row["value_a"] == pair["value_a"] and row["value_b"] == pair["value_b"]:
                 key = f"responses_steered_{side}"
                 if key not in row:
                     raise ValueError(f"Side '{side}' responses not available for this pair")
                 return list(zip(row["scenarios"], row[key]))
 
-    raise ValueError(f"No responses found for {pair['value1']} vs {pair['value2']}")
+    raise ValueError(f"No responses found for {pair['value_a']} vs {pair['value_b']}")
 
 
 if __name__ == "__main__":
-    # List pairs
+    # Get pairs as a dictionary
     pairs = get_pairs("train")
     print(f"{len(pairs)} pairs in train split:\n")
-    for p in pairs[:5]:
-        print(f"  {p['value1']} vs {p['value2']}")
+    for name in list(pairs.keys())[:5]:
+        print(f"  {name}")
     print(f"  ...\n")
 
-    # Get prompt and responses for one pair
-    pair = pairs[0]
+    # Pick a pair
+    name = list(pairs.keys())[0]
+    pair = pairs[name]
+    print(f"Pair: {name}")
+
+    # Get prompt
     prompt = get_prompt(pair, side="a")
-    print(f"Pair: {pair['value1']} vs {pair['value2']}")
     print(f"Prompt (side a):\n  {prompt[:120]}...\n")
 
+    # Get target dataset
     xy = get_target_dataset(pair, side="a")
     print(f"{len(xy)} (scenario, response) pairs:\n")
     for i, (scenario, response) in enumerate(xy[:2]):

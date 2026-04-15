@@ -24,10 +24,10 @@ from load_example import get_pairs, get_prompt, get_target_dataset
 # List all pairs in a split
 pairs = get_pairs("train")
 
-# Pick a pair
-pair = pairs[0]  # e.g., "pragmatism" vs "pedagogical clarity"
+# Pick a pair (dict keyed by "value_a vs value_b")
+pair = pairs["emotional wellbeing vs educational thoroughness"]
 
-# Get the system prompt for side "a" (value1) or "b" (value2)
+# Get the system prompt for side "a" (value_a) or "b" (value_b)
 prompt = get_prompt(pair, side="a")
 
 # Get (scenario, steered response) tuples
@@ -63,24 +63,24 @@ for scenario, response in xy:
 **Schema:**
 ```json
 {
-  "value1": "literary craft",
-  "value2": "technical rigor",
+  "value_a": "literary craft",
+  "value_b": "technical rigor",
   "p_star_a": "You are a writing assistant with deep roots in the literary tradition...",
   "p_star_b": "You are a precise and exacting writing assistant...",
   "scenarios": {
     "neutral": ["question1", "question2", ...],
-    "value1_biased": [...],
-    "value2_biased": [...]
+    "value_a_biased": [...],
+    "value_b_biased": [...]
   },
-  "value1_spectrum": [
+  "value_a_spectrum": [
     {"position": "extreme_oppose", "response": "..."},
     {"position": "strong_oppose", "response": "..."},
     ...
   ],
-  "value2_spectrum": [...],
+  "value_b_spectrum": [...],
   "n_neutral_scenarios": 50,
-  "n_value1_scenarios": 10,
-  "n_value2_scenarios": 10
+  "n_value_a_scenarios": 10,
+  "n_value_b_scenarios": 10
 }
 ```
 
@@ -99,8 +99,8 @@ Responses from **Llama 3.1 8B Instruct** under two conditions:
 **Schema:**
 ```json
 {
-  "value1": "literary craft",
-  "value2": "technical rigor",
+  "value_a": "literary craft",
+  "value_b": "technical rigor",
   "response_model": "meta-llama/Llama-3.1-8B-Instruct",
   "scenarios": ["question1", "question2", ...],
   "responses_default": ["response1", "response2", ...],
