@@ -59,13 +59,13 @@ xy = get_target_dataset(pair, side="a")
 ├── load_example.py          # Helper functions
 └── data/
     ├── train.jsonl           # 89 task definitions
-    ├── val.jsonl             # 97 task definitions
+    ├── val.jsonl             # 94 task definitions
     ├── dev.jsonl             # 93 task definitions
-    ├── test.jsonl            # 98 task definitions
+    ├── test.jsonl            # 94 task definitions
     ├── train_responses.jsonl # 89 pairs, 50 scenarios each
-    ├── val_responses.jsonl   # 97 pairs, 33-50 scenarios each
+    ├── val_responses.jsonl   # 94 pairs, 50 scenarios each
     ├── dev_responses.jsonl   # 93 pairs, 50 scenarios each
-    └── test_responses.jsonl  # 98 pairs, 50 scenarios each
+    └── test_responses.jsonl  # 94 pairs, 50 scenarios each
 ```
 
 ## Files
@@ -75,9 +75,9 @@ xy = get_target_dataset(pair, side="a")
 | File | Pairs | Description |
 |---|---|---|
 | `train.jsonl` | 89 | Training split |
-| `val.jsonl` | 97 | Validation split |
+| `val.jsonl` | 94 | Validation split |
 | `dev.jsonl` | 93 | Development split |
-| `test.jsonl` | 98 | Test split (held out) |
+| `test.jsonl` | 94 | Test split (held out) |
 
 **Schema:**
 ```json
@@ -113,9 +113,9 @@ Responses from **Llama 3.1 8B Instruct** under three conditions:
 | File | Pairs | Scenarios per pair | Notes |
 |---|---|---|---|
 | `train_responses.jsonl` | 89 | 50 | All 3 conditions |
-| `val_responses.jsonl` | 97 | 33–50 | All 3 conditions (3 pairs have <50) |
+| `val_responses.jsonl` | 94 | 50 | All 3 conditions |
 | `dev_responses.jsonl` | 93 | 50 | All 3 conditions |
-| `test_responses.jsonl` | 98 | 50 | All 3 conditions |
+| `test_responses.jsonl` | 94 | 50 | All 3 conditions |
 
 **Schema:**
 ```json
@@ -137,12 +137,12 @@ Values are split so that no value appears in more than one split. The 4 splits s
 | Split | Pairs | Intended use |
 |---|---|---|
 | train | 89 | Training extraction/distillation methods |
-| val | 97 | Validation / checkpoint selection |
+| val | 94 | Validation / checkpoint selection |
 | dev | 93 | Development and analysis |
-| test | 98 | Held-out evaluation |
+| test | 94 | Held-out evaluation |
 
 ## Data Quality
 
 - 4 pairs with quality issues (P\* mentions the opposing value, wrong format) were removed. All were in the train split.
-- Most pairs have 50 neutral scenarios. A few have fewer (minimum 33 in val).
+- 7 pairs with fewer than 50 neutral scenarios were removed (3 from val, 4 from test).
 - Some values appear in multiple pairs across splits (e.g., "historical accuracy" appears in 5 pairs). Each pairing has unique P\* prompts.
