@@ -59,11 +59,13 @@ xy = get_target_dataset(pair, side="a")
 ├── load_example.py          # Helper functions
 └── data/
     ├── train.jsonl           # 89 task definitions
-    ├── val.jsonl             # 94 task definitions
+    ├── val.jsonl             # 97 task definitions
     ├── dev.jsonl             # 93 task definitions
+    ├── test.jsonl            # 98 task definitions
     ├── train_responses.jsonl # 89 pairs, 50 scenarios each
-    ├── val_responses.jsonl   # 94 pairs, 10 scenarios each (partial)
-    └── dev_responses.jsonl   # 93 pairs, 50 scenarios each
+    ├── val_responses.jsonl   # 97 pairs, 40 scenarios each
+    ├── dev_responses.jsonl   # 93 pairs, 50 scenarios each
+    └── test_responses.jsonl  # 98 pairs, 50 scenarios each
 ```
 
 ## Files
@@ -73,8 +75,9 @@ xy = get_target_dataset(pair, side="a")
 | File | Pairs | Description |
 |---|---|---|
 | `train.jsonl` | 89 | Training split |
-| `val.jsonl` | 94 | Validation split |
+| `val.jsonl` | 97 | Validation split |
 | `dev.jsonl` | 93 | Development split |
+| `test.jsonl` | 98 | Test split (held out) |
 
 **Schema:**
 ```json
@@ -110,8 +113,9 @@ Responses from **Llama 3.1 8B Instruct** under three conditions:
 | File | Pairs | Scenarios per pair | Notes |
 |---|---|---|---|
 | `train_responses.jsonl` | 89 | 50 | All 3 conditions |
-| `val_responses.jsonl` | 94 | 10 | Partial — fewer scenarios, side a only |
+| `val_responses.jsonl` | 97 | 40 | All 3 conditions |
 | `dev_responses.jsonl` | 93 | 50 | All 3 conditions |
+| `test_responses.jsonl` | 98 | 50 | All 3 conditions |
 
 **Schema:**
 ```json
@@ -128,13 +132,14 @@ Responses from **Llama 3.1 8B Instruct** under three conditions:
 
 ## Splits
 
-Values are split so that no value appears in more than one split. The 3 splits share no value pairs.
+Values are split so that no value appears in more than one split. The 4 splits share no value pairs.
 
 | Split | Pairs | Intended use |
 |---|---|---|
 | train | 89 | Training extraction/distillation methods |
-| val | 94 | Validation / checkpoint selection |
+| val | 97 | Validation / checkpoint selection |
 | dev | 93 | Development and analysis |
+| test | 98 | Held-out evaluation |
 
 ## Data Quality
 
