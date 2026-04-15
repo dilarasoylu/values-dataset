@@ -102,15 +102,16 @@ xy = get_target_dataset(pair, side="a")
 
 ### Pre-generated model responses (`data/{split}_responses.jsonl`)
 
-Responses from **Llama 3.1 8B Instruct** under two conditions:
+Responses from **Llama 3.1 8B Instruct** under three conditions:
 - `responses_default`: base model with no system prompt (M)
 - `responses_steered_a`: model with P\*_a as system prompt (M + P\*_a)
+- `responses_steered_b`: model with P\*_b as system prompt (M + P\*_b)
 
 | File | Pairs | Scenarios per pair | Notes |
 |---|---|---|---|
-| `train_responses.jsonl` | 89 | 50 | |
-| `val_responses.jsonl` | 94 | 10 | Partial — fewer scenarios |
-| `dev_responses.jsonl` | 93 | 50 | |
+| `train_responses.jsonl` | 89 | 50 | All 3 conditions |
+| `val_responses.jsonl` | 94 | 10 | Partial — fewer scenarios, side a only |
+| `dev_responses.jsonl` | 93 | 50 | All 3 conditions |
 
 **Schema:**
 ```json
@@ -120,7 +121,8 @@ Responses from **Llama 3.1 8B Instruct** under two conditions:
   "response_model": "meta-llama/Llama-3.1-8B-Instruct",
   "scenarios": ["question1", "question2", ...],
   "responses_default": ["response1", "response2", ...],
-  "responses_steered_a": ["response1", "response2", ...]
+  "responses_steered_a": ["response1", "response2", ...],
+  "responses_steered_b": ["response1", "response2", ...]
 }
 ```
 
