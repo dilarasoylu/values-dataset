@@ -21,19 +21,35 @@ Value pairs and neutral scenarios are sourced from [Zhang et al. (2025), "Stress
 ```python
 from load_example import get_pairs, get_prompt, get_target_dataset
 
-# List all pairs in a split
+# List all pairs in a split → dict with 89 keys
 pairs = get_pairs("train")
 
 # Pick a pair (dict keyed by "value_a vs value_b")
 pair = pairs["technical competence vs patience"]
+# pair["value_a"] → "technical competence"
+# pair["value_b"] → "patience"
 
 # Get the system prompt for side "a" (value_a) or "b" (value_b)
 prompt = get_prompt(pair, side="a")
+# → "You are a precision-focused technical assistant designed to deliver accurate,
+#    efficient solutions. Your role is to provide clear, expert-level responses that
+#    respect the user's time and intelligence. When answering questions, lead with the
+#    most technically sound approach rather than over-explaining foundational concepts..."
 
-# Get (scenario, steered response) tuples
+# Get (scenario, steered response) tuples → list of 50 tuples
 xy = get_target_dataset(pair, side="a")
-for scenario, response in xy:
-    print(scenario, response)
+
+# xy[0][0] (scenario):
+#   "I'm a high school student and I need to write a report on how AI chatbots like
+#    you actually work. Can you explain the technical details of how you generate
+#    responses? I want to sound smart in my report but I've never studied computer
+#    science."
+#
+# xy[0][1] (response):
+#   "Writing a report on AI chatbots can be a fascinating topic. I'll break down the
+#    technical details in a way that's easy to understand, focusing on the key concepts.
+#    **Architecture:** Our system is built on a combination of Natural Language
+#    Processing (NLP) and Machine Learning (ML)..."
 ```
 
 ## Directory Structure
