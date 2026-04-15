@@ -91,7 +91,7 @@ if __name__ == "__main__":
     print(f"  ...\n")
 
     # Pick a pair
-    name = list(pairs.keys())[0]
+    name = "technical competence vs patience"
     pair = pairs[name]
     print(f"Pair: {name}")
 

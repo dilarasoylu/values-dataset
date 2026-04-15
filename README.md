@@ -25,7 +25,7 @@ from load_example import get_pairs, get_prompt, get_target_dataset
 pairs = get_pairs("train")
 
 # Pick a pair (dict keyed by "value_a vs value_b")
-pair = pairs["emotional wellbeing vs educational thoroughness"]
+pair = pairs["technical competence vs patience"]
 
 # Get the system prompt for side "a" (value_a) or "b" (value_b)
 prompt = get_prompt(pair, side="a")
