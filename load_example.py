@@ -5,14 +5,14 @@ Usage:
     from load_example import get_pairs, get_prompt, get_target_dataset
 
     # List all pairs in a split
-    pairs = get_pairs("dev")
+    pairs = get_pairs("train")
     pair = pairs[0]
 
     # Get the system prompt
-    prompt = get_prompt(pair, side=1)
+    prompt = get_prompt(pair, side="a")
 
     # Get (scenario, steered response) tuples
-    xy = get_target_dataset(pair, side=1)
+    xy = get_target_dataset(pair, side="a")
     for scenario, response in xy:
         print(scenario[:80])
         print(response[:80])
@@ -39,31 +39,30 @@ def get_pairs(split: str) -> list[dict]:
     return [json.loads(l) for l in open(path)]
 
 
-def get_prompt(pair: dict, side: int = 1) -> str:
+def get_prompt(pair: dict, side: str = "a") -> str:
     """Get the system prompt P* for a value pair.
 
     Args:
         pair: a pair dict from get_pairs()
-        side: 1 for value1 (P*_a) or 2 for value2 (P*_b)
+        side: "a" for value1 (P*_a) or "b" for value2 (P*_b)
 
     Returns:
         the system prompt string
     """
-    key = "p_star_a" if side == 1 else "p_star_b"
+    key = f"p_star_{side}"
     return pair[key]
 
 
-def get_target_dataset(pair: dict, side: int = 1) -> list[tuple[str, str]]:
+def get_target_dataset(pair: dict, side: str = "a") -> list[tuple[str, str]]:
     """Get (scenario, steered response) pairs for a value pair.
 
     Args:
         pair: a pair dict from get_pairs()
-        side: 1 for value1 (P*_a steered) or 2 for value2 (P*_b steered)
+        side: "a" for value1 (P*_a steered) or "b" for value2 (P*_b steered)
 
     Returns:
         list of (scenario, response) tuples
     """
-    split = None
     for s in ["train", "val", "dev", "test"]:
         path = DATA_DIR / f"{s}_responses.jsonl"
         if not path.exists():
@@ -71,9 +70,9 @@ def get_target_dataset(pair: dict, side: int = 1) -> list[tuple[str, str]]:
         for line in open(path):
             row = json.loads(line)
             if row["value1"] == pair["value1"] and row["value2"] == pair["value2"]:
-                key = "responses_steered_a" if side == 1 else "responses_steered_b"
+                key = f"responses_steered_{side}"
                 if key not in row:
-                    raise ValueError(f"Side {side} responses not available for this pair")
+                    raise ValueError(f"Side '{side}' responses not available for this pair")
                 return list(zip(row["scenarios"], row[key]))
 
     raise ValueError(f"No responses found for {pair['value1']} vs {pair['value2']}")
@@ -81,18 +80,19 @@ def get_target_dataset(pair: dict, side: int = 1) -> list[tuple[str, str]]:
 
 if __name__ == "__main__":
     # List pairs
-    pairs = get_pairs("dev")
-    print(f"{len(pairs)} pairs in dev split:\n")
+    pairs = get_pairs("train")
+    print(f"{len(pairs)} pairs in train split:\n")
     for p in pairs[:5]:
         print(f"  {p['value1']} vs {p['value2']}")
     print(f"  ...\n")
 
     # Get prompt and responses for one pair
-    pair = next(p for p in pairs if p["value1"] == "literary craft")
-    prompt = get_prompt(pair, side=1)
-    print(f"Prompt for '{pair['value1']}':\n  {prompt[:120]}...\n")
+    pair = pairs[0]
+    prompt = get_prompt(pair, side="a")
+    print(f"Pair: {pair['value1']} vs {pair['value2']}")
+    print(f"Prompt (side a):\n  {prompt[:120]}...\n")
 
-    xy = get_target_dataset(pair, side=1)
+    xy = get_target_dataset(pair, side="a")
     print(f"{len(xy)} (scenario, response) pairs:\n")
     for i, (scenario, response) in enumerate(xy[:2]):
         print(f"--- Example {i+1} ---")

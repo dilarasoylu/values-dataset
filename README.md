@@ -22,16 +22,16 @@ Value pairs and neutral scenarios are sourced from [Zhang et al. (2025), "Stress
 from load_example import get_pairs, get_prompt, get_target_dataset
 
 # List all pairs in a split
-pairs = get_pairs("dev")
+pairs = get_pairs("train")
 
 # Pick a pair
 pair = pairs[0]  # e.g., "pragmatism" vs "pedagogical clarity"
 
-# Get the system prompt for side 1 (value1) or side 2 (value2)
-prompt = get_prompt(pair, side=1)
+# Get the system prompt for side "a" (value1) or "b" (value2)
+prompt = get_prompt(pair, side="a")
 
 # Get (scenario, steered response) tuples
-xy = get_target_dataset(pair, side=1)
+xy = get_target_dataset(pair, side="a")
 for scenario, response in xy:
     print(scenario, response)
 ```
