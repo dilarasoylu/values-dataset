@@ -42,10 +42,9 @@ for scenario, response in xy:
 ├── README.md
 ├── load_example.py          # Helper functions
 └── data/
-    ├── train.jsonl           # 93 task definitions
-    ├── val.jsonl             # 97 task definitions
-    ├── dev.jsonl             # 96 task definitions
-    ├── test.jsonl            # 98 task definitions
+    ├── train.jsonl           # 89 task definitions
+    ├── val.jsonl             # 94 task definitions
+    ├── dev.jsonl             # 93 task definitions
     ├── train_responses.jsonl # 89 pairs, 50 scenarios each
     ├── val_responses.jsonl   # 94 pairs, 10 scenarios each (partial)
     └── dev_responses.jsonl   # 93 pairs, 50 scenarios each
@@ -57,10 +56,9 @@ for scenario, response in xy:
 
 | File | Pairs | Description |
 |---|---|---|
-| `train.jsonl` | 93 | Training split |
-| `val.jsonl` | 97 | Validation split |
-| `dev.jsonl` | 96 | Development split |
-| `test.jsonl` | 98 | Test split (held out) |
+| `train.jsonl` | 89 | Training split |
+| `val.jsonl` | 94 | Validation split |
+| `dev.jsonl` | 93 | Development split |
 
 **Schema:**
 ```json
@@ -112,14 +110,13 @@ Responses from **Llama 3.1 8B Instruct** under two conditions:
 
 ## Splits
 
-Values are split so that no value appears in more than one split. The 4 splits share no value pairs.
+Values are split so that no value appears in more than one split. The 3 splits share no value pairs.
 
 | Split | Pairs | Intended use |
 |---|---|---|
-| train | 93 | Training extraction/distillation methods |
-| val | 97 | Validation / checkpoint selection |
-| dev | 96 | Development and analysis |
-| test | 98 | Held-out evaluation |
+| train | 89 | Training extraction/distillation methods |
+| val | 94 | Validation / checkpoint selection |
+| dev | 93 | Development and analysis |
 
 ## Data Quality
 
