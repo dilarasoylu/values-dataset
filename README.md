@@ -63,7 +63,7 @@ xy = get_target_dataset(pair, side="a")
     ├── dev.jsonl             # 93 task definitions
     ├── test.jsonl            # 98 task definitions
     ├── train_responses.jsonl # 89 pairs, 50 scenarios each
-    ├── val_responses.jsonl   # 97 pairs, 40 scenarios each
+    ├── val_responses.jsonl   # 97 pairs, 33-50 scenarios each
     ├── dev_responses.jsonl   # 93 pairs, 50 scenarios each
     └── test_responses.jsonl  # 98 pairs, 50 scenarios each
 ```
@@ -113,7 +113,7 @@ Responses from **Llama 3.1 8B Instruct** under three conditions:
 | File | Pairs | Scenarios per pair | Notes |
 |---|---|---|---|
 | `train_responses.jsonl` | 89 | 50 | All 3 conditions |
-| `val_responses.jsonl` | 97 | 40 | All 3 conditions |
+| `val_responses.jsonl` | 97 | 33–50 | All 3 conditions (3 pairs have <50) |
 | `dev_responses.jsonl` | 93 | 50 | All 3 conditions |
 | `test_responses.jsonl` | 98 | 50 | All 3 conditions |
 
